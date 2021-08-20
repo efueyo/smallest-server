@@ -25,7 +25,6 @@ func BuildResponse(r *http.Request) ([]byte, error) {
         Query: r.URL.Query(),
         Header: r.Header,
     }
-    r.URL.Query()
     // ignore error
     return json.Marshal(res)
 }
