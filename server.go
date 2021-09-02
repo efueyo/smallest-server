@@ -13,6 +13,7 @@ import (
 type Response struct {
     OK bool `json:"ok"`
     Path string `json:"path"`
+    Method string `json:"method"`
     Query url.Values `json:"query"`
     Header http.Header `json:"header"`
 }
@@ -22,6 +23,7 @@ func BuildResponse(r *http.Request) ([]byte, error) {
     res := Response{
         OK: true,
         Path: html.EscapeString(r.URL.Path),
+        Method: r.Method,
         Query: r.URL.Query(),
         Header: r.Header,
     }
