@@ -42,6 +42,7 @@ func main() {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintf(w, "Error: %q", err)
 		} else {
+			w.Header().Set("Content-Type", "application/json")
 			w.Write(res)
 		}
 	})
