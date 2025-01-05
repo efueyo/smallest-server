@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -16,16 +17,23 @@ type Response struct {
 	Method string      `json:"method"`
 	Query  url.Values  `json:"query"`
 	Header http.Header `json:"header"`
+	Body   string      `json:"body"`
 }
 
 // BuildResponse builds the response for a specific request
 func BuildResponse(r *http.Request) ([]byte, error) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	res := Response{
 		OK:     true,
 		Path:   html.EscapeString(r.URL.Path),
 		Method: r.Method,
 		Query:  r.URL.Query(),
 		Header: r.Header,
+		Body:   string(body),
 	}
 	// ignore error
 	return json.Marshal(res)
@@ -49,4 +57,3 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
-
